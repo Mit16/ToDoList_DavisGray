@@ -9,26 +9,37 @@ function App() {
   const API_URL = "http://localhost:3500/items";
 
   const [items, setItems] = useState([]);
-
   const [newItem, setNewItem] = useState("");
   const [search, setSearch] = useState("");
+  //For generating error in case the link is not working or any other erroe
+  const [fetchError, setFetchError] = useState(null);
+  //as we are stimulating the RestAPI it takes some load time, so to show the load msg insted of empty list msg
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchItems = async () =>{
-      try{
+    const fetchItems = async () => {
+      try {
         const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Did not receive expected data");
         const listItems = await response.json();
-        console.log(listItems);
+        // console.log(listItems);
         setItems(listItems);
-      } catch (err){
-        console.log(err.stack);
+        setFetchError(null);
+      } catch (err) {
+        // console.log(err.message);
+        setFetchError(err.message);
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
     // (async () => await fetchItems())();   //not need like this, make a simple call
     // fetchItem does not return a value.Therefore, this async IIFE(instantly invoked function expression) is not required. You can just make a call to fetchItems()
 
-    fetchItems();
+    // this API may not be as fast as the RestAPI in the local environment so stimulate that we are going to do this:
+    setTimeout(() => {
+      fetchItems();
+    }, 2000);
   }, []);
 
   const addItem = (item) => {
@@ -68,13 +79,20 @@ function App() {
         handleSubmit={handleSubmit}
       />
       <SearchItem search={search} setSearch={setSearch} />
-      <Content
-        items={items.filter((item) =>
-          item.item.toLowerCase().includes(search.toLowerCase())
+      <main>
+        {isLoading && <p>Loading Items...</p>}
+        {fetchError && <p style={{ color: "red" }}>{`Error: ${fetchError}`}</p>}
+        {/* to prevent the content from loading if there's a error */}
+        {!fetchError && !isLoading && (
+          <Content
+            items={items.filter((item) =>
+              item.item.toLowerCase().includes(search.toLowerCase())
+            )}
+            handleCheck={handleCheck}
+            handleDelete={handleDelete}
+          />
         )}
-        handleCheck={handleCheck}
-        handleDelete={handleDelete}
-      />
+      </main>
       <Footer length={items.length} />
     </div>
   );

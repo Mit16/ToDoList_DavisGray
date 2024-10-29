@@ -28,7 +28,7 @@ const Content = ({ items, handleCheck, handleDelete }) => {
   //  }
 
   return (
-    <main>
+    <div>
       {/* <p onDoubleClick={handleClick}>Hello {name}!</p>
       <button onClick={handleNameChange}>Change Name</button>
       <button onClick={handleClick}>Click It</button>
@@ -44,7 +44,7 @@ const Content = ({ items, handleCheck, handleDelete }) => {
       ) : (
         <p style={{ marginTop: "2rem" }}>Your list is Empty.</p>
       )}
-    </main>
+    </div>
   );
 };
 
