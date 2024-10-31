@@ -14,7 +14,7 @@ const LineItem = ({ item, handleCheck, handleDelete }) => {
     >
       {item.item}
     </label>
-    <button onClick={() => handleDelete(item.id)}>Delete</button>
+    <button onClick={() => handleDelete(item.id)}>❌</button>
   </li>
 )
 }
