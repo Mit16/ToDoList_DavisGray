@@ -49,7 +49,8 @@ function App() {
   //so we need to change add item to async function
   const addItem = async (item) => {
     //🔴 It's an bug here it is taking the id as string and concatinating 1 to it insted of adding to it
-    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    //To solve that issue I have typecasted it into integer by parseInt() and then converted back it to the string as the JSON require a string not an integer
+    const id = items.length ? String(parseInt(items[items.length - 1].id) + 1) : 1;
     const myNewItem = { id, checked: false, item };
     const listItems = [...items, myNewItem];
     setItems(listItems);
